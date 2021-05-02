@@ -1,5 +1,6 @@
 .coverage
 .git/
+.idea/
 .vscode/
 __pycache__/
 purbeurre_project/settings/production.py
