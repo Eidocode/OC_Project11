@@ -1,0 +1,21 @@
+.sign {
+    padding-top: 10rem;
+    padding-bottom: calc(10rem - 4.5rem);
+    background: linear-gradient(to bottom, rgba(104, 75, 49, 0.3) 40%, rgba(104, 75, 49, 0.6) 100%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+    min-height: 100%;
+  }
+
+.product {
+padding-top: 5rem;
+padding-bottom: calc(10rem - 4.5rem);
+background: linear-gradient(to bottom, rgba(104, 75, 49, 0.3) 40%, rgba(104, 75, 49, 0.6) 100%);
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: scroll;
+background-size: cover;
+min-height: 70%;
+}

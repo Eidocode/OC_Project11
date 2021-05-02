@@ -1,0 +1,17 @@
+<!-- Base Product page -->
+{% extends 'products/base.html' %}
+
+{% block header %}
+
+<header class="masthead2">
+    <div class="w-100 shadow-lg text-white justify-content-center text-center">
+        <div class="banner" style="background-image: url({{ product.url_img }})" alt="" />
+            <h1 class="pt-4">{{ product.name|truncatechars:40 }}</h1>
+            <hr class="divider mt-3"/>
+            <p class="mt-5"><h4>Marque</h4></p>
+            <p class="mt-2"><h2>{{ product.brand }}</h2></p>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}

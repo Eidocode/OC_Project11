@@ -1,0 +1,25 @@
+<!-- Registration page -->
+{% extends 'products/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+<section class="page-section sign">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0 pt-3">Création de compte</h2>
+                <hr class="divider my-4" />
+                <h5 class="mt-0 pt-3">Qui êtes-vous</h5>
+                <br/>
+                <form method="POST" class="ml-auto my-2 my-lg-0">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button id="logon_btn" class="btn btn-primary" type="submit">Valider</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

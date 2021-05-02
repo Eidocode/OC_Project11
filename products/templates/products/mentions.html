@@ -1,0 +1,49 @@
+<!-- 'Mentions' page -->
+{% extends 'products/base.html' %}
+
+{% block content %}
+
+<header class="page-section sign" id="login_page">
+    <div class="container h-100">
+        <div class="row h-75 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0"><span class="font-weight-bold">Mentions légales</span></h2>
+                <hr class="divider my-4" />
+                <br/>
+            </div>
+            <div class="col-lg-8 text-justify">
+                <p>L'application <span class="font-weight-bold">Purbeurre App'</span> est un projet <span class="font-weight-bold">Openclassrooms</span> 
+                développé par David Bouzerar dans le cadre du parcours - <span class="font-weight-bold">développeur d'application Python.</span></p>
+                <p>Le projet a été développé en <span class="font-weight-bold">Python</span> et s'appuie, en grande majorité, sur le 
+                <span class="font-weight-bold">framework Django</span>. L'aspect visuel est assuré par <span class="font-weight-bold">HTML5, 
+                Javascript et CSS (framework Bootstrap)</span></p>
+                <hr class="divider my-4" />
+
+                <h4><span class="font-weight-bold">Hébergeur</span></h4>
+                <p>L'application <a class="font-weight-bold" href="https://app-purbeurre.herokuapp.com/">App-purbeurre</a> est hébergée sur la plateforme 
+                <span class="font-weight-bold">Heroku Inc.</span>, 650 7th Street, San Francisco, CA (tel : +33 1 (877) 563-4311)</p>
+                <hr class="divider my-4" />
+
+                <h4><span class="font-weight-bold">Ressources</span></h4>
+                <p>L'application web utilise différentes ressources dont voici les références :</p>
+
+                <p><span class="font-weight-bold">Icones</span> : <ul>
+                                <li><span class="font-weight-bold">IconMoon</span></li>
+                                <li><span class="font-weight-bold">FontAwesome - <a href="https://fontawesome.com/">fontawesome.com</a></span></li>
+                            </ul>
+                </p>
+                <p><span class="font-weight-bold">Contenu</span> : Les informations contenues dans les produits et catégories proviennent de 
+                l'<span class="font-weight-bold">API OpenFoodFacts - <a href="https://fr.openfoodfacts.org/">https://fr.openfoodfacts.org/</a></span></p>
+                <p><span class="font-weight-bold">Photo (Background)</span> : Photo by <span class="font-weight-bold">Olenka Kotyk on Unsplash</span>
+                <hr class="divider my-4" />
+                <h4><span class="font-weight-bold">Vie privée</span></h4>
+                <p>Les données renseignées lors de la création d'un compte utilisateur ne requièrent pas d'informations privées et ne sont là que dans un but 
+                de démonstration des possibilitées offertes par l'application. Il n'est demandé aucune confirmation, y compris concernant l'adresse mail renseignée. 
+                Si toutefois l'utilisateur souhaite supprimer son compte, merci de le signaler à l'adresse suivante : 
+                <a href="mailto://eidocode@orange.fr">eidocode@orange.fr</a></span> en indiquant comme sujet <span class="font-weight-bold">"Suppression compte utilisateur"</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock content %}

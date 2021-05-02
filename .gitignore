@@ -1,0 +1,7 @@
+.coverage
+.git/
+.vscode/
+__pycache__/
+purbeurre_project/settings/production.py
+purbeurre_project/staticfiles/
+purbeurre_project/static/

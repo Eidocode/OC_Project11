@@ -1,0 +1,62 @@
+<!-- Detail page -->
+{% extends 'products/base_product.html' %}
+
+{% block content %}
+
+<section class="product">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-lg-6 ml-auto text-center mb-lg-0 ">
+                <div>
+                    <h4>Nutriscore</h4>
+                </div>
+
+                <div class="mt-3 pb-2">
+                    {% with 'A B C D E' as list %}
+                        <ul class="list-inline">
+                        {% for score in list.split %}
+                            {% if score|upper == product.score|upper %}
+                                {% if score|upper == "A" %}
+                                    <li style="color:rgb(3,129,65)" class="list-inline-item"><h1>{{ score|upper }}</h1></li>
+                                {% elif score|upper == "B" %}
+                                    <li style="color:rgb(133,187,47)" class="list-inline-item"><h1>{{ score|upper }}</h1></li>
+                                {% elif score|upper == "C" %}
+                                    <li style="color:rgb(254,203,2)" class="list-inline-item"><h1>{{ score|upper }}</h1></li>
+                                {% elif score|upper == "D" %}
+                                    <li style="color:rgb(238,129,0)" class="list-inline-item"><h1>{{ score|upper }}</h1></li>
+                                {% elif score|upper == "E" %}
+                                    <li style="color:rgb(230,62,17)" class="list-inline-item"><h1>{{ score|upper }}</h1></li>
+                                {% endif %}
+                            {% else %}
+                                <li class="list-inline-item"><h3>{{ score|upper }}</h3></li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% endwith %}
+                </div>
+                <div class="mt-3 pb-2">
+                    <p>Code barre : <span class="font-weight-bolder">{{ product.barcode }}</span></p>
+                    {% if product.description|length > 5 %}
+                        <p class="pt-2 font-weight-light font-italic">{{ product.description }}</p>
+                    {% else %}
+                        <p class="pt-2 font-weight-light font-italic">Aucune description disponible pour ce produit...</p>
+                    {% endif %}
+                </div>
+                <div class="mt-5 mb-4">
+                    <a class="shadow btn btn-primary" href="{{ product.url_off }}" target="_blank" role="button">
+                        Consulter la fiche produit Openfoodfacts
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 mr-auto text-center">
+                <h4>Repères nutritionnels pour 100gr.</h4>
+                <div>
+                    <img class="shadow-lg" src={{ product.url_img_nutrition }} class="mt-3 img-rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
