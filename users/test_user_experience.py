@@ -86,21 +86,36 @@ class TestUserExperience(TestCase):
         self.assertEqual(current_user.first_name, 'test4')
         self.assertEqual(current_user.last_name, 'user4')
 
-    def test_change_password(self):
-        # Test change password page with current user
+    def test_change_password_page(self):
+        # Test change password page
+        password_page = self.client.get(reverse('change_password'))
+        self.assertEqual(password_page.status_code, 200)
+    
+    def test_change_password_failure(self):
+        # Test change password (failure) with current user
+        data = {
+            'old_password': 'Apass_0101',
+            'new_password1': 'Newpass_0505',
+            'new_password2': 'Newpass_0505',
+        }
+        change_password = self.client.post(
+            reverse('change_password'),
+            data
+        )
+        self.assertEqual(change_password.status_code, 200)
+    
+    def test_change_password_success(self):
+        # Test change password (success) with current user
         data = {
             'old_password': 'Apass_0404',
             'new_password1': 'Newpass_0505',
             'new_password2': 'Newpass_0505',
         }
-        password_page = self.client.get(reverse('change_password'))
-        self.assertEqual(password_page.status_code, 200)
-        self.client.post(
+        change_password = self.client.post(
             reverse('change_password'),
             data
         )
-        self.assertRedirects(password_page, reverse('user_account'))
-
+        self.assertRedirects(change_password, reverse('user_account'))
 
     def test_search_product(self):
         # Test to search an available product
