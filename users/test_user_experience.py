@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import PasswordChangeForm
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -84,6 +85,22 @@ class TestUserExperience(TestCase):
         self.assertEqual(current_user.username, 'test_user4')
         self.assertEqual(current_user.first_name, 'test4')
         self.assertEqual(current_user.last_name, 'user4')
+
+    def test_change_password(self):
+        # Test change password page with current user
+        data = {
+            'old_password': 'Apass_0404',
+            'new_password1': 'Newpass_0505',
+            'new_password2': 'Newpass_0505',
+        }
+        password_page = self.client.get(reverse('change_password'))
+        self.assertEqual(password_page.status_code, 200)
+        self.client.post(
+            reverse('change_password'),
+            data
+        )
+        self.assertRedirects(password_page, reverse('user_account'))
+
 
     def test_search_product(self):
         # Test to search an available product

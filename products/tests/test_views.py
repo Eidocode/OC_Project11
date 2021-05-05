@@ -367,3 +367,24 @@ class MentionPageTestCase(TestCase):
         # Test that mention page uses a correct template
         response = self.client.get(reverse('mentions'))
         self.assertTemplateUsed(response, 'products/mentions.html')
+
+
+class ResetPasswordPageTestCase(TestCase):
+    """
+        Reset password page test case
+    """
+
+    def test_reset_url_exists_at_location(self):
+        # Test that reset page location returns 200
+        response = self.client.get('/users/password/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_reset_url_by_name(self):
+        # Test that reset page name returns 200
+        response = self.client.get(reverse('change_password'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_mentions_url_uses_correct_template(self):
+        # Test that reset page uses a correct template
+        response = self.client.get(reverse('change_password'))
+        self.assertTemplateUsed(response, 'users/change_password.html')
