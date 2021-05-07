@@ -121,6 +121,12 @@ class TestAppIntegration(StaticLiveServerTestCase):
         btn = self.driver.find_element_by_id("send_btn")
         self.assertTrue(btn.is_enabled())
 
+    def test_user_account(self):
+        self.login()
+        self.driver.get(self.live_server_url+'/users/account/')
+        change_pwd_button = self.driver.find_element_by_id("save1")
+
+
     def add_to_db(self):
         # Method used to add new items to database
 
