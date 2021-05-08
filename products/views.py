@@ -11,6 +11,7 @@ def index(request):
     """
     Used for index page
     """
+    form = None
     if request.GET.get(0) is None:
         # Initialize the search form if GET request is empty
         form = SearchForm()
@@ -45,29 +46,24 @@ def result(request, product_id):
         # Get products related to the categor(y)(ies)
         prods = Product.objects.filter(categories__id=catg.id)
         for prod in prods:
-            if (prod.score <= product.score):
+            if prod.score <= product.score:
                 # Adds products with same or higher score to all_prods list
                 all_prods.append(prod)
 
     nb_prod = 6
-    if (len(all_prods) < nb_prod):
+    if len(all_prods) < nb_prod:
         nb_prod = len(all_prods)
 
     for i in range(nb_prod):
         # Randomly selects products(substitutes) whose number is defined
         # by nb_prod. These substitutes are displayed in the page
-        index = randrange(0, len(all_prods))
-        substitutes.append(all_prods.pop(index))
+        this_index = randrange(0, len(all_prods))
+        substitutes.append(all_prods.pop(this_index))
         i += 1
 
     # Gets current user favorites
     qs_fav = Favorite.objects.filter(users__id=current_user.id)
-    fav_prods_id = []
-    for fav in qs_fav:
-        fav_prods_id.append(fav.products.id)
-
-    # print(fav_prods_id)
-    # print(len(substitutes))
+    fav_prods_id = [fav.products.id for fav in qs_fav]
     context = {
         'product': product,
         'substitutes': substitutes,
@@ -122,7 +118,7 @@ def search(request):
 
     if form.is_valid():
         # Boolean used if query match (True) or not (False)
-        result = True
+        this_result = True
 
         # Returns products based on query
         products = Product.objects.filter(
@@ -134,7 +130,7 @@ def search(request):
             products = Product.objects.filter(
                         categories__name__icontains=query).order_by('-id')
             if not products.exists():
-                result = False
+                this_result = False
                 # Returns all products from database
                 products = Product.objects.all().order_by('id')
 
@@ -149,13 +145,13 @@ def search(request):
         except EmptyPage:
             products = paginator.page(paginator.num_pages)
 
-        if result:
+        if this_result:
             title = "Résultats de la recherche : {}".format(query)
         else:
             title = "Aucun résultat pour la recherche : {}".format(query)
 
         context = {
-            'is_result': result,
+            'is_result': this_result,
             'products': products,
             'title': title,
             'paginate': True,

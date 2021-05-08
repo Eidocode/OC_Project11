@@ -44,7 +44,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
     def test_logon_new_user(self):
         # Tests logon user from signup page
 
-        # New user informations
+        # New user information
         user = {
             'username': "toto",
             'fname': "Toto",
@@ -75,11 +75,11 @@ class TestAppIntegration(StaticLiveServerTestCase):
         pass1_field = self.driver.find_element_by_id("id_password1")
         pass1_field.send_keys(user['password'])
 
-        # confirme password
+        # confirm password
         pass2_field = self.driver.find_element_by_id("id_password2")
         pass2_field.send_keys(user['password'])
 
-        # submit informations
+        # submit information
         time.sleep(1)
         submit = self.driver.find_element_by_id('logon_btn')
         submit.send_keys(Keys.RETURN)
@@ -103,7 +103,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
         username_field = self.driver.find_element_by_id("id_password")
         username_field.send_keys("Apass_0404")
 
-        # submit login informations
+        # submit login information
         time.sleep(1)
         submit = self.driver.find_element_by_id('login_btn')
         submit.send_keys(Keys.RETURN)
@@ -121,13 +121,70 @@ class TestAppIntegration(StaticLiveServerTestCase):
         btn = self.driver.find_element_by_id("send_btn")
         self.assertTrue(btn.is_enabled())
 
-    def test_user_account(self):
-        self.login()
-        self.driver.get(self.live_server_url+'/users/account/')
-        change_pwd_button = self.driver.find_element_by_id("save1")
+    def test_user_account_page(self):
+        # Test user account page
 
+        self.login()  # Login user
+        self.driver.get(self.live_server_url + '/users/account/')  # account page
+        time.sleep(1)
+        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/account/')
 
-    def add_to_db(self):
+    def test_change_user_password_button(self):
+        # Test change password button
+
+        self.login()  # Login user
+        self.driver.get(self.live_server_url + '/users/account/')  # account page
+        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)  # change password button
+        time.sleep(1)
+        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+
+    def test_failure_change_user_password(self):
+        # Test case failure for change password
+
+        self.login()  # Login user
+        self.driver.get(self.live_server_url + '/users/password/')  # password page
+
+        # Passwords
+        ids = {
+            'id_old_password': 'a_password',
+            'id_new_password1': 'new_Apass_0404',
+            'id_new_password2': 'new_Apass_0404',
+        }
+        for key, value in ids.items():
+            # Adding passwords to fields
+            field = self.driver.find_element_by_id(key)
+            field.send_keys(value)
+        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")  # Save button
+        save_pwd_button.send_keys(Keys.RETURN)
+        time.sleep(1)
+        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+
+    def test_success_change_user_password(self):
+        # Test case success for change password
+
+        self.login()  # Login user
+        self.driver.get(self.live_server_url + '/users/account/')  # account page
+        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)  # change password button
+        time.sleep(1)
+        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+
+        # Passwords
+        ids = {
+            'id_old_password': 'Apass_0404',
+            'id_new_password1': 'new_Apass_0404',
+            'id_new_password2': 'new_Apass_0404',
+        }
+        for key, value in ids.items():
+            # Adding passwords to fields
+            field = self.driver.find_element_by_id(key)
+            field.send_keys(value)
+        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")  # Save button
+        save_pwd_button.send_keys(Keys.RETURN)
+        time.sleep(1)
+        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/account/')
+
+    @staticmethod
+    def add_to_db():
         # Method used to add new items to database
 
         # Adds 1 category in test database
