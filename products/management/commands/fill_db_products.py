@@ -108,9 +108,6 @@ class Command(BaseCommand):
         except requests.exceptions.ConnectionError:
             print('Unable to connect to {}, skip the category...'.format(url))
             return
-        except requests.exceptions.ConnectionError:
-            print('An error has occured with {}...'.format(url))
-            return
 
         self.stdout.write("Getting products from " + url)
         json_data = url_json.json()

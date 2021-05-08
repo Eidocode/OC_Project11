@@ -4,18 +4,20 @@
 <li class="nav-item">
 <a class="nav-link js-scroll-trigger" href="#account">
     <form action="{% url 'search_fav' %}" method="get" class="ml-auto my-2 my-lg-0">
-        <input id='user-form' type="text" name="user_search" class="form-control form-control-sm bg-grey" placeholder="Chercher...">
+        <label for='user-form'>
+            <input id='user-form' type="text" name="user_search" class="form-control form-control-sm bg-grey" placeholder="Chercher...">
+        </label>
     </form>
 </a>
 </li>
 
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href={% url 'user_account' %} title="Mon compte"><i class="fas fa-user fa-2x"></i></a></li>
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href={% url 'favorites'%} title="Mes aliments"><i class="fas fa-carrot fa-2x"></i></a></li>
+<li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'user_account' %}" title="Mon compte"><i class="fas fa-user fa-2x"></i></a></li>
+<li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'favorites'%}" title="Mes aliments"><i class="fas fa-carrot fa-2x"></i></a></li>
 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/logout" title="Déconnexion"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
 
 {% else %}
 
-<li class="nav-item"><a class="nav-link js-scroll-trigger" href={% url 'signup'%} title="S'enregistrer"><i class="fas fa-user-plus fa-2x"></i></a></li>
+<li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'signup'%}" title="S'enregistrer"><i class="fas fa-user-plus fa-2x"></i></a></li>
 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/login" title="Connexion"><i class="fas fa-sign-in-alt fa-2x"></i></a></li>
 
 {% endif %}

@@ -12,7 +12,7 @@
         
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href= {% static 'products/img/logo_pur_beurre-favicon.png' %} />
-        <link href= {% static 'products/css/styles.css' %} rel="stylesheet" />
+        <link href= "{% static 'products/css/styles.css' %}" rel="stylesheet" />
     </head>
 
     <body>
@@ -22,7 +22,7 @@
                     <div class="col-12">
                         <div class="h-100 justify-content-center">
                             <div class="align-items-center justify-content-center text-center">
-                                <a class="rounded-pill shadow btn btn-primary" href={% url 'index' %} role="button" title="Return to Home">
+                                <a class="rounded-pill shadow btn btn-primary" href="{% url 'index' %}" role="button" title="Return to Home">
                                     Retour à la page d'accueil
                                 </a>
                             </div>

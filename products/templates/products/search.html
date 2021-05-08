@@ -28,7 +28,7 @@
                     
                         <div width="180" height="200" class="py-1 px-1 col-lg-4 col-sm-6">
                             <a class="portfolio-box bg-thumbs shadow rounded-lg border border-white" href={% url 'result' product_id=product.id %}>
-                                <img class="img my-4 rounded-lg shadow" style="max-width: 90%; max-height: 90%;" height="200" src={{ product.url_img_small }} alt="" />
+                                <img class="img my-4 rounded-lg shadow" style="max-width: 90%; max-height: 90%;" height="200" src="{{ product.url_img_small }}" alt="small image"/>
                                 <div class="portfolio-box-caption">
                                     <div class="project-category text-white-50">{{ product.brand }}</div>
                                     <div class="project-name">{{ product.name }}</div>
