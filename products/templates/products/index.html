@@ -19,6 +19,9 @@
                 {% if user.is_authenticated %}
                 <form action="{% url 'search' %}" method="get" class="ml-auto my-2 my-lg-0">
                     <div class="input-group">
+                        <div class="input-group-append" >
+                            {{ form.search_filter }}
+                        </div>
                         {{ form.search }}
                         <div class="input-group-append">
                             <button id="send_btn" class="btn btn-primary" type="submit">Chercher</button>
