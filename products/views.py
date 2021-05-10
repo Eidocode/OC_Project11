@@ -107,6 +107,23 @@ def add_fav(request, product_id):
     return redirect(request.META['HTTP_REFERER'])
 
 
+def get_search_result(result_products):
+    # Boolean used if query match (True) or not (False)
+    this_result = True
+
+    products = result_products
+    if not products.exists():
+        print('recherche category')
+        this_result = False
+        # Returns all products from database
+        products = Product.objects.all().order_by('id')
+
+    return {
+        'products': products,
+        'result': this_result
+    }
+
+
 def search(request):
     """
     Used during the search
@@ -115,24 +132,30 @@ def search(request):
     query = unidecode(request.GET.get('search')).lower()
 
     form = SearchForm(request.GET)
+    search_filter = request.GET['search_filter']
 
     if form.is_valid():
-        # Boolean used if query match (True) or not (False)
-        this_result = True
+        result_products = None
 
-        # Returns products based on query
-        products = Product.objects.filter(
-                    name__icontains=query).order_by('-id')
+        if search_filter == 'product':
+            # Returns products based on query
+            result_products = Product.objects.filter(
+                    name__unaccent__icontains=query).order_by('-id')
+        elif search_filter == 'category':
+            result_products = Product.objects.filter(
+                    categories__name__icontains=query).order_by('-id')
+        elif search_filter == 'brand':
+            result_products = Product.objects.filter(
+                    brand__icontains=query).order_by('-id')
+        elif search_filter == 'barcode':
+            result_products = Product.objects.filter(
+                    barcode__icontains=query).order_by('-id')
+        elif search_filter == 'score':
+            result_products = Product.objects.filter(
+                    score__contains=query).order_by('-id')
 
-        if not products.exists():
-            print('recherche category')
-            # Returns products from a category name based on query
-            products = Product.objects.filter(
-                        categories__name__icontains=query).order_by('-id')
-            if not products.exists():
-                this_result = False
-                # Returns all products from database
-                products = Product.objects.all().order_by('id')
+        search_result = get_search_result(result_products)
+        products = search_result['products']
 
         # Init pagination with 6 products
         paginator = Paginator(products, 6)
@@ -145,13 +168,13 @@ def search(request):
         except EmptyPage:
             products = paginator.page(paginator.num_pages)
 
-        if this_result:
+        if search_result['result']:
             title = "Résultats de la recherche : {}".format(query)
         else:
             title = "Aucun résultat pour la recherche : {}".format(query)
 
         context = {
-            'is_result': this_result,
+            'is_result': search_result['result'],
             'products': products,
             'title': title,
             'paginate': True,

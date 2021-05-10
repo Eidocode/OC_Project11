@@ -75,10 +75,10 @@ class SearchForm(forms.Form):
                 self._errors['search'] = self.error_class([
                     "Un nutriscore n'est composé que d'une seule lettre"
                 ])
-            score_letters = ('A', 'B', 'C', 'D', 'E', 'F')
+            score_letters = ('A', 'B', 'C', 'D', 'E')
             if str(search).upper() not in score_letters:
                 self._errors['search'] = self.error_class([
-                    f"Seules les caractères suivants sont autorisés dans un nutriscore : {score_letters}"
+                    f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}"
                 ])
 
     def clean(self):
