@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'favorites.apps.FavoritesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.postgres',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

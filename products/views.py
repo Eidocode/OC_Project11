@@ -143,10 +143,10 @@ def search(request):
                     name__unaccent__icontains=query).order_by('-id')
         elif search_filter == 'category':
             result_products = Product.objects.filter(
-                    categories__name__icontains=query).order_by('-id')
+                    categories__name__unaccent__icontains=query).order_by('-id')
         elif search_filter == 'brand':
             result_products = Product.objects.filter(
-                    brand__icontains=query).order_by('-id')
+                    brand__unaccent__icontains=query).order_by('-id')
         elif search_filter == 'barcode':
             result_products = Product.objects.filter(
                     barcode__icontains=query).order_by('-id')
