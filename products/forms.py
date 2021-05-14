@@ -20,7 +20,7 @@ class SearchForm(forms.Form):
         widget=forms.TextInput(attrs={
             'id': 'id_search',
             'class': 'form-control form-control-lg bg-light',
-            'placeholder': 'Rechercher un produit...'
+            'placeholder': 'Rechercher un élément...'
         }),
         required=True
     )
@@ -62,24 +62,25 @@ class SearchForm(forms.Form):
             if len(search) > 13:
                 self._errors['search'] = self.error_class([
                     "Les code barres utilisent la norme EAN et ne peuvent contenir, au maximum, que 13 caractères "
-                    "numériques "
+                    "numeric "
                 ])
-            if not bool(re.search(r"\d", search)):
+            if bool(re.search(r"\D", search)):
                 self._errors['search'] = self.error_class([
                     "Les caractères autres que des chiffres ne sont pas autorisés dans un code barre"
                 ])
 
     def check_nutriscore_search(self, search, search_filter):
         if search_filter == 'score':
-            if len(search) > 1 or bool(re.search(r"\d", search)):
+            if len(search) > 1:
                 self._errors['search'] = self.error_class([
                     "Un nutriscore n'est composé que d'une seule lettre"
                 ])
-            score_letters = ('A', 'B', 'C', 'D', 'E')
-            if str(search).upper() not in score_letters:
-                self._errors['search'] = self.error_class([
-                    f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}"
-                ])
+            elif not bool(re.search(r"\d", search)):
+                score_letters = ('A', 'B', 'C', 'D', 'E')
+                if str(search).upper() not in score_letters:
+                    self._errors['search'] = self.error_class([
+                        f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}"
+                    ])
 
     def clean(self):
         super(SearchForm, self).clean()

@@ -35,4 +35,24 @@ class SearchFormTest(TestCase):
         # Test form Placeholder value
         form = SearchForm()
         attr = form.fields['search'].widget.attrs['placeholder']
-        self.assertEquals(attr, 'Rechercher un produit...')
+        self.assertEquals(attr, 'Rechercher un élément...')
+
+    def test_search_filter_form_widget_attrs_class(self):
+        # Test form class attributes (search_filter)
+        form = SearchForm()
+        attr = form.fields['search_filter'].widget.attrs['class']
+        self.assertEquals(attr, 'btn btn-light rounded-left')
+
+    def test_search_filter_form_filter_choices(self):
+        # Test form choices attributes (search_filter)
+        form = SearchForm()
+        attr = form.fields['search_filter'].widget.choices
+        filter_choices = [
+            ('product', 'Produit'),
+            ('category', 'Catégorie'),
+            ('brand', 'Marque'),
+            ('barcode', 'Code Barre'),
+            ('score', 'Nutriscore')
+        ]
+        for i, item in enumerate(attr):
+            self.assertEquals(item, filter_choices[i])

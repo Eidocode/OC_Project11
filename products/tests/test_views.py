@@ -25,6 +25,12 @@ class IndexPageTestCase(TestCase):
         response = self.client.get(reverse('index'))
         self.assertTemplateUsed(response, 'products/index.html')
 
+
+class IndexPageSearchBarTestCase(TestCase):
+    """
+        Index Page Search Bar test case
+    """
+
     def test_index_search_form_one_char(self):
         # Test that submit one char on search form returns an error
         form = SearchForm(data={
@@ -39,7 +45,7 @@ class IndexPageTestCase(TestCase):
     def test_index_search_form_special_char(self):
         # Test that submit a special char on search form returns an error
         form = SearchForm(data={
-            'search_filter': 'product',
+            'search_filter': 'category',
             'search': 'recherche@'
         })
         self.assertFalse(form.is_valid())
@@ -58,13 +64,70 @@ class IndexPageTestCase(TestCase):
     def test_index_search_form_number(self):
         # Test that submit a number returns an error
         form = SearchForm(data={
-            'search_filter': 'product',
+            'search_filter': 'brand',
             'search': 'recherche1',
         })
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
             'Les chiffres ne sont pas autorisés')
+
+    def test_index_search_form_barcode_less_5_chars(self):
+        # Test that submitting a barcode of less than 5 characters returns an error
+        form = SearchForm(data={
+            'search_filter': 'barcode',
+            'search': '1234',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form.errors['search'][0],
+            "Saisir, au minimum, cinq caractères pour valider la recherche d'un code barre")
+
+    def test_index_search_form_barcode_more_13_chars(self):
+        # Test that submitting a barcode longer than 13 characters returns an error
+        form = SearchForm(data={
+            'search_filter': 'barcode',
+            'search': '12345678901234',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form.errors['search'][0],
+            "Les code barres utilisent la norme EAN et ne peuvent contenir, au maximum, que 13 caractères "
+            "numeric ")
+
+    def test_index_search_form_barcode_with_letters(self):
+        # Test that submitting a barcode containing letters returns an error
+        form = SearchForm(data={
+            'search_filter': 'barcode',
+            'search': '1234567K',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form.errors['search'][0],
+            "Les caractères autres que des chiffres ne sont pas autorisés dans un code barre")
+
+    def test_index_search_form_nutriscore_with_many_chars(self):
+        # Test that submitting a nutriscore containing more than one character returns an error
+        form = SearchForm(data={
+            'search_filter': 'score',
+            'search': 'AB',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form.errors['search'][0],
+            "Un nutriscore n'est composé que d'une seule lettre")
+
+    def test_index_search_form_nutriscore_with_nonexistent_letter(self):
+        # Test that submitting a nutriscore containing a non-existent letter returns an error
+        form = SearchForm(data={
+            'search_filter': 'score',
+            'search': 'F',
+        })
+        score_letters = ('A', 'B', 'C', 'D', 'E')
+        self.assertFalse(form.is_valid())
+        self.assertEquals(
+            form.errors['search'][0],
+            f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}")
 
 
 class SearchPageTestCase(TestCase):
