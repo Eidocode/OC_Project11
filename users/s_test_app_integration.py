@@ -231,7 +231,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.assertEqual(len(products), 1)
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url+'/products/search/?search=Product'
+            self.live_server_url+'/products/search/?search_filter=product&search=Product'
         )
 
         # Test product result page

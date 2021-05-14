@@ -27,7 +27,10 @@ class IndexPageTestCase(TestCase):
 
     def test_index_search_form_one_char(self):
         # Test that submit one char on search form returns an error
-        form = SearchForm(data={'search': 'd'})
+        form = SearchForm(data={
+            'search_filter': 'product',
+            'search': 'd'
+        })
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
@@ -35,7 +38,10 @@ class IndexPageTestCase(TestCase):
 
     def test_index_search_form_special_char(self):
         # Test that submit a special char on search form returns an error
-        form = SearchForm(data={'search': 'recherche@'})
+        form = SearchForm(data={
+            'search_filter': 'product',
+            'search': 'recherche@'
+        })
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
@@ -43,12 +49,18 @@ class IndexPageTestCase(TestCase):
 
     def test_index_search_form_with_a_quote(self):
         # Test that submit a quote is not considered like a special char
-        form = SearchForm(data={'search': "C'est une recherche"})
+        form = SearchForm(data={
+            'search_filter': 'product',
+            'search': "C'est une recherche"
+        })
         self.assertTrue(form.is_valid())
 
     def test_index_search_form_number(self):
         # Test that submit a number returns an error
-        form = SearchForm(data={'search': 'recherche1'})
+        form = SearchForm(data={
+            'search_filter': 'product',
+            'search': 'recherche1',
+        })
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
@@ -62,12 +74,12 @@ class SearchPageTestCase(TestCase):
 
     def test_search_url_exists_at_location(self):
         # Test that search page returns 200
-        response = self.client.get('/products/search/?search=test')
+        response = self.client.get('/products/search/?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
 
     def test_search_url_by_name(self):
         # Test that a valid research returns 200
-        response = self.client.get(reverse('search')+'?search=test')
+        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
 
     def test_bad_search_url_returns_404(self):
@@ -77,12 +89,12 @@ class SearchPageTestCase(TestCase):
 
     def test_search_url_uses_correct_template(self):
         # Test that search page returns a correct template
-        response = self.client.get(reverse('search')+'?search=test')
+        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
         self.assertTemplateUsed(response, 'products/search.html')
 
     def test_pagination_is_true(self):
         # Test pagination
-        response = self.client.get(reverse('search')+'?search=test')
+        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('paginate' in response.context)
         self.assertTrue(response.context['paginate'] is True)

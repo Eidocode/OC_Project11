@@ -118,7 +118,7 @@ class TestUserExperience(TestCase):
 
     def test_search_product(self):
         # Test to search an available product
-        search = self.client.get(reverse('search')+'?search=Product')
+        search = self.client.get(reverse('search')+'?search_filter=product&search=Product')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
 
