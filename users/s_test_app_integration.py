@@ -259,6 +259,82 @@ class TestAppIntegration(StaticLiveServerTestCase):
         favorites = Favorite.objects.all()
         self.assertEqual(len(favorites), 0)
 
+    def test_filter_search_category(self):
+        # Tests search category
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a product
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Catégorie']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("Category")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check result page
+        self.assertEqual(
+            self.driver.current_url,
+            self.live_server_url + '/products/search/?search_filter=category&search=Category'
+        )
+
+    def test_filter_search_brand(self):
+        # Tests search brand
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a brand
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Marque']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("Brand")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check result page
+        self.assertEqual(
+            self.driver.current_url,
+            self.live_server_url + '/products/search/?search_filter=brand&search=Brand'
+        )
+
+    def test_filter_search_barcode(self):
+        # Tests search barcode
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a brand
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Code Barre']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("12345678910")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check result page
+        self.assertEqual(
+            self.driver.current_url,
+            self.live_server_url + '/products/search/?search_filter=barcode&search=12345678910'
+        )
+
+    def test_filter_search_nutriscore(self):
+        # Tests search nutriscore
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a nutriscore
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Nutriscore']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("B")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check result page
+        self.assertEqual(
+            self.driver.current_url,
+            self.live_server_url + '/products/search/?search_filter=score&search=B'
+        )
+
     def test_logout_user(self):
         # Tests logout user
 

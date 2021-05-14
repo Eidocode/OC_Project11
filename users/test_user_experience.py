@@ -31,7 +31,7 @@ class TestUserExperience(TestCase):
                 brand=f'Brand {pnum}',
                 description='Product Description',
                 score='B',
-                barcode=f'12345678910 {pnum}',
+                barcode=f'12345678910{pnum}',
                 url_img_small=f'https://www.off.com/cat/prod/img_small{pnum}',
                 url_img=f'https://www.off.com/cat/prod/img{pnum}',
                 url_off=f'https://www.off.com/cat/prod/off{pnum}',
@@ -121,6 +121,7 @@ class TestUserExperience(TestCase):
         search = self.client.get(reverse('search')+'?search_filter=product&search=Product')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
+        self.assertEqual(len(search.context['products']), 6)
 
     def test_result_product(self):
         # Test result page with an existing product
@@ -128,9 +129,36 @@ class TestUserExperience(TestCase):
                     'result',
                     kwargs={'product_id': self.product_id}
                 ))
-
         self.assertEqual(result.status_code, 200)
         self.assertEqual(len(result.context['substitutes']), 6)
+
+    def test_search_category(self):
+        # Test search by category
+        search = self.client.get(reverse('search')+'?search_filter=category&search=Category')
+        self.assertEqual(search.status_code, 200)
+        self.assertTrue(search.context['paginate'] is True)
+        self.assertEqual(len(search.context['products']), 6)
+
+    def test_search_brand(self):
+        # Test search by brand
+        search = self.client.get(reverse('search')+'?search_filter=brand&search=Brand')
+        self.assertEqual(search.status_code, 200)
+        self.assertTrue(search.context['paginate'] is True)
+        self.assertEqual(len(search.context['products']), 6)
+
+    def test_search_barcode(self):
+        # Test search by barcode
+        search = self.client.get(reverse('search')+'?search_filter=barcode&search=1234567891012')
+        self.assertEqual(search.status_code, 200)
+        self.assertTrue(search.context['paginate'] is True)
+        self.assertEqual(len(search.context['products']), 1)
+
+    def test_search_nutriscore(self):
+        # Test search by nutriscore
+        search = self.client.get(reverse('search')+'?search_filter=score&search=B')
+        self.assertEqual(search.status_code, 200)
+        self.assertTrue(search.context['paginate'] is True)
+        self.assertEqual(len(search.context['products']), 6)
 
     def test_handles_favorites(self):
         # Test to add, check & remove a product from favorites
