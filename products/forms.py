@@ -76,7 +76,7 @@ class SearchForm(forms.Form):
                 ])
             if len(search) > 13:
                 self._errors['search'] = self.error_class([
-                    "Les code barres utilisent la norme EAN et ne peuvent "
+                    "Les codes barres utilisent la norme EAN et ne peuvent "
                     "contenir, au maximum, que 13 caractères "
                     "numériques"
                 ])

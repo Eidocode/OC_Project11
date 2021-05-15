@@ -93,8 +93,8 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Les code barres utilisent la norme EAN et ne peuvent contenir, "
-            "au maximum, que 13 caractères numériques ")
+            "Les codes barres utilisent la norme EAN et ne peuvent contenir, "
+            "au maximum, que 13 caractères numériques")
 
     def test_index_search_form_barcode_with_letters(self):
         # Test that submitting a barcode containing letters returns an error
