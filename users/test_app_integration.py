@@ -125,24 +125,30 @@ class TestAppIntegration(StaticLiveServerTestCase):
         # Test user account page
 
         self.login()  # Login user
-        self.driver.get(self.live_server_url + '/users/account/')  # account page
+        # account page
+        self.driver.get(self.live_server_url + '/users/account/')
         time.sleep(1)
-        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/account/')
+        self.assertEqual(self.driver.current_url,
+                         self.live_server_url + '/users/account/')
 
     def test_change_user_password_button(self):
         # Test change password button
 
         self.login()  # Login user
-        self.driver.get(self.live_server_url + '/users/account/')  # account page
-        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)  # change password button
+        # account page
+        self.driver.get(self.live_server_url + '/users/account/')
+        # change password button
+        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)
         time.sleep(1)
-        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+        self.assertEqual(self.driver.current_url,
+                         self.live_server_url + '/users/password/')
 
     def test_failure_change_user_password(self):
         # Test case failure for change password
 
         self.login()  # Login user
-        self.driver.get(self.live_server_url + '/users/password/')  # password page
+        # password page
+        self.driver.get(self.live_server_url + '/users/password/')
 
         # Passwords
         ids = {
@@ -154,19 +160,24 @@ class TestAppIntegration(StaticLiveServerTestCase):
             # Adding passwords to fields
             field = self.driver.find_element_by_id(key)
             field.send_keys(value)
-        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")  # Save button
+        # Save button
+        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")
         save_pwd_button.send_keys(Keys.RETURN)
         time.sleep(1)
-        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+        self.assertEqual(self.driver.current_url,
+                         self.live_server_url + '/users/password/')
 
     def test_success_change_user_password(self):
         # Test case success for change password
 
         self.login()  # Login user
-        self.driver.get(self.live_server_url + '/users/account/')  # account page
-        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)  # change password button
+        # account page
+        self.driver.get(self.live_server_url + '/users/account/')
+        # change password button
+        self.driver.find_element_by_id("reset_btn").send_keys(Keys.RETURN)
         time.sleep(1)
-        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/password/')
+        self.assertEqual(self.driver.current_url,
+                         self.live_server_url + '/users/password/')
 
         # Passwords
         ids = {
@@ -178,10 +189,12 @@ class TestAppIntegration(StaticLiveServerTestCase):
             # Adding passwords to fields
             field = self.driver.find_element_by_id(key)
             field.send_keys(value)
-        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")  # Save button
+        # Save button
+        save_pwd_button = self.driver.find_element_by_id("rst_pwd_btn")
         save_pwd_button.send_keys(Keys.RETURN)
         time.sleep(1)
-        self.assertEqual(self.driver.current_url, self.live_server_url + '/users/account/')
+        self.assertEqual(self.driver.current_url,
+                         self.live_server_url + '/users/account/')
 
     @staticmethod
     def add_to_db():
@@ -229,9 +242,10 @@ class TestAppIntegration(StaticLiveServerTestCase):
         # Checks products in db & result page
         products = Product.objects.all()
         self.assertEqual(len(products), 1)
+        search_link = '/products/search/?search_filter=product&search=Product'
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url+'/products/search/?search_filter=product&search=Product'
+            self.live_server_url + search_link
         )
 
         # Test product result page
@@ -266,16 +280,18 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a product
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Catégorie']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option[text()='Catégorie']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("Category")
         time.sleep(1)
         submit = self.driver.find_element_by_id('send_btn')
         submit.send_keys(Keys.RETURN)  # Submit research
         # Check result page
+        search_link = '/products/search/?search_filter=category&search=Category'
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url + '/products/search/?search_filter=category&search=Category'
+            self.live_server_url + search_link
         )
 
     def test_filter_search_brand(self):
@@ -285,16 +301,18 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a brand
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Marque']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option[text()='Marque']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("Brand")
         time.sleep(1)
         submit = self.driver.find_element_by_id('send_btn')
         submit.send_keys(Keys.RETURN)  # Submit research
         # Check result page
+        search_link = '/products/search/?search_filter=brand&search=Brand'
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url + '/products/search/?search_filter=brand&search=Brand'
+            self.live_server_url + search_link
         )
 
     def test_category_search_with_special_char(self):
@@ -305,7 +323,8 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a category
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Catégorie']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option[text()='Catégorie']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("Category@")
         time.sleep(1)
@@ -326,7 +345,8 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a category
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Marque']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option[text()='Marque']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("M")
         time.sleep(1)
@@ -346,7 +366,9 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a category
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Code Barre']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option"
+                                          "[text()='Code Barre']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("12453JDS")
         time.sleep(1)
@@ -366,7 +388,9 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a category
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Nutriscore']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option"
+                                          "[text()='Nutriscore']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("AB")
         time.sleep(1)
@@ -386,16 +410,20 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a brand
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Code Barre']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option"
+                                          "[text()='Code Barre']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("12345678910")
         time.sleep(1)
         submit = self.driver.find_element_by_id('send_btn')
         submit.send_keys(Keys.RETURN)  # Submit research
         # Check result page
+        search_link = "/products/search/?search_filter=" \
+                      "barcode&search=12345678910"
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url + '/products/search/?search_filter=barcode&search=12345678910'
+            self.live_server_url + search_link
         )
 
     def test_filter_search_nutriscore(self):
@@ -405,16 +433,19 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a nutriscore
-        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Nutriscore']").click()
+        self.driver.find_element_by_xpath("//select[@name='search_filter']"
+                                          "/option"
+                                          "[text()='Nutriscore']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("B")
         time.sleep(1)
         submit = self.driver.find_element_by_id('send_btn')
         submit.send_keys(Keys.RETURN)  # Submit research
         # Check result page
+        search_link = '/products/search/?search_filter=score&search=B'
         self.assertEqual(
             self.driver.current_url,
-            self.live_server_url + '/products/search/?search_filter=score&search=B'
+            self.live_server_url + search_link
         )
 
     def test_logout_user(self):

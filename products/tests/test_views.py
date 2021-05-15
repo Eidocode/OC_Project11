@@ -73,7 +73,7 @@ class IndexPageSearchBarTestCase(TestCase):
             'Les chiffres ne sont pas autorisés')
 
     def test_index_search_form_barcode_less_5_chars(self):
-        # Test that submitting a barcode of less than 5 characters returns an error
+        # Test submitting a barcode of less than 5 characters returns an error
         form = SearchForm(data={
             'search_filter': 'barcode',
             'search': '1234',
@@ -81,10 +81,11 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Saisir, au minimum, cinq caractères pour valider la recherche d'un code barre")
+            "Saisir, au minimum, cinq caractères pour valider "
+            "la recherche d'un code barre")
 
     def test_index_search_form_barcode_more_13_chars(self):
-        # Test that submitting a barcode longer than 13 characters returns an error
+        # Test submitting a barcode longer than 13 characters returns an error
         form = SearchForm(data={
             'search_filter': 'barcode',
             'search': '12345678901234',
@@ -92,8 +93,8 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Les code barres utilisent la norme EAN et ne peuvent contenir, au maximum, que 13 caractères "
-            "numeric ")
+            "Les code barres utilisent la norme EAN et ne peuvent contenir, "
+            "au maximum, que 13 caractères numériques ")
 
     def test_index_search_form_barcode_with_letters(self):
         # Test that submitting a barcode containing letters returns an error
@@ -107,7 +108,8 @@ class IndexPageSearchBarTestCase(TestCase):
             "Seuls les chiffres sont autorisés dans un code barre")
 
     def test_index_search_form_nutriscore_with_many_chars(self):
-        # Test that submitting a nutriscore containing more than one character returns an error
+        # Test submitting a nutriscore containing more than one character
+        # returns an error
         form = SearchForm(data={
             'search_filter': 'score',
             'search': 'AB',
@@ -118,7 +120,8 @@ class IndexPageSearchBarTestCase(TestCase):
             "Un nutriscore n'est composé que d'une seule lettre")
 
     def test_index_search_form_nutriscore_with_nonexistent_letter(self):
-        # Test that submitting a nutriscore containing a non-existent letter returns an error
+        # Test submitting a nutriscore containing a non-existent letter
+        # returns an error
         form = SearchForm(data={
             'search_filter': 'score',
             'search': 'F',
@@ -127,7 +130,8 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}")
+            f"Seuls les caractères suivants sont autorisés dans un "
+            f"nutriscore : {score_letters}")
 
 
 class SearchPageTestCase(TestCase):
@@ -137,12 +141,14 @@ class SearchPageTestCase(TestCase):
 
     def test_search_url_exists_at_location(self):
         # Test that search page returns 200
-        response = self.client.get('/products/search/?search_filter=product&search=test')
+        response = self.client.get(
+            '/products/search/?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
 
     def test_search_url_by_name(self):
         # Test that a valid research returns 200
-        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
+        response = self.client.get(
+            reverse('search')+'?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
 
     def test_bad_search_url_returns_404(self):
@@ -152,12 +158,14 @@ class SearchPageTestCase(TestCase):
 
     def test_search_url_uses_correct_template(self):
         # Test that search page returns a correct template
-        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
+        response = self.client.get(
+            reverse('search')+'?search_filter=product&search=test')
         self.assertTemplateUsed(response, 'products/search.html')
 
     def test_pagination_is_true(self):
         # Test pagination
-        response = self.client.get(reverse('search')+'?search_filter=product&search=test')
+        response = self.client.get(
+            reverse('search')+'?search_filter=product&search=test')
         self.assertEqual(response.status_code, 200)
         self.assertTrue('paginate' in response.context)
         self.assertTrue(response.context['paginate'] is True)

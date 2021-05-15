@@ -56,7 +56,8 @@ class SearchForm(forms.Form):
             # Returns an error if the search length is < 2
             if len(search) < 2:
                 self._errors['search'] = self.error_class([
-                    'Saisir, au minimum, deux caractères pour valider la recherche'
+                    'Saisir, au minimum, deux caractères pour valider '
+                    'la recherche'
                 ])
             # Returns an error if the search contains a number
             if bool(re.search(r"\d", search)):
@@ -70,12 +71,14 @@ class SearchForm(forms.Form):
         if search_filter == 'barcode':
             if len(search) < 5:
                 self._errors['search'] = self.error_class([
-                    "Saisir, au minimum, cinq caractères pour valider la recherche d'un code barre"
+                    "Saisir, au minimum, cinq caractères pour valider "
+                    "la recherche d'un code barre"
                 ])
             if len(search) > 13:
                 self._errors['search'] = self.error_class([
-                    "Les code barres utilisent la norme EAN et ne peuvent contenir, au maximum, que 13 caractères "
-                    "numeric "
+                    "Les code barres utilisent la norme EAN et ne peuvent "
+                    "contenir, au maximum, que 13 caractères "
+                    "numériques"
                 ])
             if bool(re.search(r"\D", search)):
                 self._errors['search'] = self.error_class([
@@ -94,7 +97,8 @@ class SearchForm(forms.Form):
                 score_letters = ('A', 'B', 'C', 'D', 'E')
                 if str(search).upper() not in score_letters:
                     self._errors['search'] = self.error_class([
-                        f"Seuls les caractères suivants sont autorisés dans un nutriscore : {score_letters}"
+                        f"Seuls les caractères suivants sont autorisés dans "
+                        f"un nutriscore : {score_letters}"
                     ])
 
     def clean(self):

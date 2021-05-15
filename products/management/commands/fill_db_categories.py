@@ -109,8 +109,8 @@ class Command(BaseCommand):
         return list_cat_filtered
 
     def _get_random_categories(self, nb_cat):
-        """Returns some random categories contained in _get_categories defined by
-        int nb_cat"""
+        """Returns some random categories contained in _get_categories defined
+        by int nb_cat"""
 
         # Gets Openfoodfacts categories
         lst = self._get_categories(MIN_PRODUCTS_TO_FILTER)
@@ -131,8 +131,9 @@ class Command(BaseCommand):
         return categories
 
     def _compare_with_db(self, nb_cat):
-        """Compares the data in the database with data received from openfoodfacts
-        to avoid adding duplicates. Returns a clean list of categories"""
+        """Compares the data in the database with data received from
+        openfoodfacts to avoid adding duplicates. Returns a clean list of
+        categories"""
 
         categories_in_db = Category.objects.all()  # Gets categories from db
         json_ids_in_db = []

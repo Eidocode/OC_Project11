@@ -41,7 +41,7 @@ class TestUserExperience(TestCase):
             product.categories.add(category.id)
 
         products = Product.objects.all()
-        # some classe variables
+        # some class variables
         cls.product_id = products[1].id
         cls.substitute_id = products[20].id
         cls.favorite_id = None
@@ -118,7 +118,8 @@ class TestUserExperience(TestCase):
 
     def test_search_product(self):
         # Test to search an available product
-        search = self.client.get(reverse('search')+'?search_filter=product&search=Product')
+        search = self.client.get(
+            reverse('search')+'?search_filter=product&search=Product')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 6)
@@ -134,28 +135,32 @@ class TestUserExperience(TestCase):
 
     def test_search_category(self):
         # Test search by category
-        search = self.client.get(reverse('search')+'?search_filter=category&search=Category')
+        search = self.client.get(
+            reverse('search')+'?search_filter=category&search=Category')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 6)
 
     def test_search_brand(self):
         # Test search by brand
-        search = self.client.get(reverse('search')+'?search_filter=brand&search=Brand')
+        search = self.client.get(
+            reverse('search')+'?search_filter=brand&search=Brand')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 6)
 
     def test_search_barcode(self):
         # Test search by barcode
-        search = self.client.get(reverse('search')+'?search_filter=barcode&search=1234567891012')
+        search = self.client.get(
+            reverse('search')+'?search_filter=barcode&search=1234567891012')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 1)
 
     def test_search_nutriscore(self):
         # Test search by nutriscore
-        search = self.client.get(reverse('search')+'?search_filter=score&search=B')
+        search = self.client.get(
+            reverse('search')+'?search_filter=score&search=B')
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 6)
