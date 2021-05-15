@@ -297,6 +297,88 @@ class TestAppIntegration(StaticLiveServerTestCase):
             self.live_server_url + '/products/search/?search_filter=brand&search=Brand'
         )
 
+    def test_category_search_with_special_char(self):
+        # Tests search category with a special char. Must fail
+        # Same for all other research
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a category
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Catégorie']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("Category@")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check error message
+        result = self.driver.find_element_by_id("form_error").text
+        self.assertEqual(
+            result,
+            "Les caractères spéciaux ne sont pas autorisés"
+        )
+
+    def test_brand_search_with_one_char(self):
+        # Tests search brand with only one char. Must fail
+        # Same for product and category research
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a category
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Marque']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("M")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check error message
+        result = self.driver.find_element_by_id("form_error").text
+        self.assertEqual(
+            result,
+            "Saisir, au minimum, deux caractères pour valider la recherche"
+        )
+
+    def test_barcode_search_with_letters(self):
+        # Tests search barcode with letters. Must fail
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a category
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Code Barre']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("12453JDS")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check error message
+        result = self.driver.find_element_by_id("form_error").text
+        self.assertEqual(
+            result,
+            "Seuls les chiffres sont autorisés dans un code barre"
+        )
+
+    def test_nutriscore_search_with_two_letters(self):
+        # Tests search nutriscore with two letters. Must fail
+
+        # Login a user & add elements to database
+        self.login()
+        self.add_to_db()
+        # search a category
+        self.driver.find_element_by_xpath("//select[@name='search_filter']/option[text()='Nutriscore']").click()
+        search_field = self.driver.find_element_by_id('id_search')
+        search_field.send_keys("AB")
+        time.sleep(1)
+        submit = self.driver.find_element_by_id('send_btn')
+        submit.send_keys(Keys.RETURN)  # Submit research
+        # Check error message
+        result = self.driver.find_element_by_id("form_error").text
+        self.assertEqual(
+            result,
+            "Un nutriscore n'est composé que d'une seule lettre"
+        )
+
     def test_filter_search_barcode(self):
         # Tests search barcode
 

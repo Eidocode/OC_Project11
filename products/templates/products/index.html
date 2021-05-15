@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     {% if form.errors %}
-                        <div class="text-danger pt-2">
+                        <div id="form_error" class="text-danger pt-2">
                             {% for field in form%}
                                 {% for error in field.errors%}
                                     {{ error|escape }}

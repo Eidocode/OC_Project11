@@ -36,10 +36,14 @@ def user_account(request):
 
 
 def change_password(request):
+    """
+    Used when user change his password
+    """
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
+            # Update user session with new password
             update_session_auth_hash(request, user)
             return redirect('user_account')
     else:

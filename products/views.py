@@ -108,16 +108,16 @@ def add_fav(request, product_id):
 
 
 def get_search_result(result_products):
+    """
+    Returns desired products if exist or all the products if they don't
+    """
     # Boolean used if query match (True) or not (False)
     this_result = True
-
     products = result_products
     if not products.exists():
-        print('recherche category')
         this_result = False
         # Returns all products from database
         products = Product.objects.all().order_by('id')
-
     return {
         'products': products,
         'result': this_result

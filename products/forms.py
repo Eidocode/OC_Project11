@@ -13,6 +13,15 @@ class SearchForm(forms.Form):
     -------
     clean()
         Returns the search submitted by the user after performing the tests.
+
+    check_product_search()
+        Check product search constraints
+
+    check_barcode_search()
+        Check barcode search constraints
+
+    check_nutriscore_search()
+        Check nutriscore search constraints
     """
 
     search = forms.CharField(
@@ -41,6 +50,8 @@ class SearchForm(forms.Form):
     )
 
     def check_product_search(self, search, search_filter, filter_value):
+        # Check product search constraints
+
         if search_filter == filter_value:
             # Returns an error if the search length is < 2
             if len(search) < 2:
@@ -54,6 +65,8 @@ class SearchForm(forms.Form):
                 ])
 
     def check_barcode_search(self, search, search_filter):
+        # Check barcode search constraints
+
         if search_filter == 'barcode':
             if len(search) < 5:
                 self._errors['search'] = self.error_class([
@@ -66,10 +79,12 @@ class SearchForm(forms.Form):
                 ])
             if bool(re.search(r"\D", search)):
                 self._errors['search'] = self.error_class([
-                    "Les caractères autres que des chiffres ne sont pas autorisés dans un code barre"
+                    "Seuls les chiffres sont autorisés dans un code barre"
                 ])
 
     def check_nutriscore_search(self, search, search_filter):
+        # Check nutriscore search constraints
+
         if search_filter == 'score':
             if len(search) > 1:
                 self._errors['search'] = self.error_class([
@@ -87,6 +102,7 @@ class SearchForm(forms.Form):
         search = self.cleaned_data.get('search')  # Gets search input
         search_filter = self.cleaned_data.get('search_filter')
 
+        # Check all constraints
         self.check_product_search(search, search_filter, 'product')
         self.check_product_search(search, search_filter, 'category')
         self.check_product_search(search, search_filter, 'brand')

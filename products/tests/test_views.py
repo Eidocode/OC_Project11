@@ -104,7 +104,7 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Les caractères autres que des chiffres ne sont pas autorisés dans un code barre")
+            "Seuls les chiffres sont autorisés dans un code barre")
 
     def test_index_search_form_nutriscore_with_many_chars(self):
         # Test that submitting a nutriscore containing more than one character returns an error
