@@ -24,15 +24,15 @@ class TestUserExperience(TestCase):
         category.save()
 
         prod_with_accent = Product(
-                name=f'Pâtes',
-                brand=f'Marqué',
+                name='Pâtes',
+                brand='Marqué',
                 description='Product Description',
                 score='B',
-                barcode=f'12345678',
-                url_img_small=f'https://www.off.com/cat/prod/img_small',
-                url_img=f'https://www.off.com/cat/prod/img',
-                url_off=f'https://www.off.com/cat/prod/off',
-                url_img_nutrition=f'https://www.off.com/cat/prod/img_nt',
+                barcode='12345678',
+                url_img_small='https://www.off.com/cat/prod/img_small',
+                url_img='https://www.off.com/cat/prod/img',
+                url_off='https://www.off.com/cat/prod/off',
+                url_img_nutrition='https://www.off.com/cat/prod/img_nt',
             )
         prod_with_accent.save()
         prod_with_accent.categories.add(category.id)
@@ -103,7 +103,7 @@ class TestUserExperience(TestCase):
         # Test change password page
         password_page = self.client.get(reverse('change_password'))
         self.assertEqual(password_page.status_code, 200)
-    
+
     def test_change_password_failure(self):
         # Test change password (failure) with current user
         data = {
@@ -116,7 +116,7 @@ class TestUserExperience(TestCase):
             data
         )
         self.assertEqual(change_password.status_code, 200)
-    
+
     def test_change_password_success(self):
         # Test change password (success) with current user
         data = {

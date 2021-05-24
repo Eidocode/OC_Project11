@@ -143,7 +143,8 @@ def search(request):
                     name__unaccent__icontains=query).order_by('-id')
         elif search_filter == 'category':
             result_products = Product.objects.filter(
-                    categories__name__unaccent__icontains=query).order_by('-id')
+                    categories__name__unaccent__icontains=query
+                ).order_by('-id')
         elif search_filter == 'brand':
             result_products = Product.objects.filter(
                     brand__unaccent__icontains=query).order_by('-id')

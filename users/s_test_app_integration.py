@@ -280,8 +280,9 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a product
-        self.driver.find_element_by_xpath("//select[@name='search_filter']"
-                                          "/option[text()='Catégorie']").click()
+        self.driver.find_element_by_xpath(
+            "//select[@name='search_filter']"
+            "/option[text()='Catégorie']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("Category")
         time.sleep(1)
@@ -323,8 +324,9 @@ class TestAppIntegration(StaticLiveServerTestCase):
         self.login()
         self.add_to_db()
         # search a category
-        self.driver.find_element_by_xpath("//select[@name='search_filter']"
-                                          "/option[text()='Catégorie']").click()
+        self.driver.find_element_by_xpath(
+            "//select[@name='search_filter']"
+            "/option[text()='Catégorie']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("Category@")
         time.sleep(1)
