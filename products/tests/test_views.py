@@ -82,7 +82,7 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertEquals(
             form.errors['search'][0],
             "Saisir, au minimum, cinq caractères pour valider "
-            "la recherche d'un code barre")
+            "la recherche d'un code-barres")
 
     def test_index_search_form_barcode_more_13_chars(self):
         # Test submitting a barcode longer than 13 characters returns an error
@@ -93,7 +93,7 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Les codes barres utilisent la norme EAN et ne peuvent contenir, "
+            "Les codes-barres utilisent la norme EAN et ne peuvent contenir, "
             "au maximum, que 13 caractères numériques")
 
     def test_index_search_form_barcode_with_letters(self):
@@ -105,7 +105,7 @@ class IndexPageSearchBarTestCase(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(
             form.errors['search'][0],
-            "Seuls les chiffres sont autorisés dans un code barre")
+            "Seuls les chiffres sont autorisés dans un code-barres")
 
     def test_index_search_form_nutriscore_with_many_chars(self):
         # Test submitting a nutriscore containing more than one character

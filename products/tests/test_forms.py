@@ -51,7 +51,7 @@ class SearchFormTest(TestCase):
             ('product', 'Produit'),
             ('category', 'Catégorie'),
             ('brand', 'Marque'),
-            ('barcode', 'Code Barre'),
+            ('barcode', 'Code-Barres'),
             ('score', 'Nutriscore')
         ]
         for i, item in enumerate(attr):

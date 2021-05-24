@@ -23,6 +23,20 @@ class TestUserExperience(TestCase):
         )
         category.save()
 
+        prod_with_accent = Product(
+                name=f'Pâtes',
+                brand=f'Marqué',
+                description='Product Description',
+                score='B',
+                barcode=f'12345678',
+                url_img_small=f'https://www.off.com/cat/prod/img_small',
+                url_img=f'https://www.off.com/cat/prod/img',
+                url_off=f'https://www.off.com/cat/prod/off',
+                url_img_nutrition=f'https://www.off.com/cat/prod/img_nt',
+            )
+        prod_with_accent.save()
+        prod_with_accent.categories.add(category.id)
+
         # Add 40 products in test database
         number_of_products = 40
         for pnum in range(number_of_products):
@@ -67,7 +81,7 @@ class TestUserExperience(TestCase):
     def test_products(self):
         # Test products in database
         products = Product.objects.all()
-        self.assertEqual(len(products), 40)
+        self.assertEqual(len(products), 41)
 
     def test_logon_user(self):
         # Test that user is registered
@@ -123,6 +137,22 @@ class TestUserExperience(TestCase):
         self.assertEqual(search.status_code, 200)
         self.assertTrue(search.context['paginate'] is True)
         self.assertEqual(len(search.context['products']), 6)
+
+    def test_search_product_with_accented_name(self):
+        # Product search test with or without accent
+        first_search = self.client.get(
+            reverse('search')+'?search_filter=product&search=Pâte')
+        second_search = self.client.get(
+            reverse('search')+'?search_filter=product&search=Pate')
+        self.assertEqual(first_search.status_code, 200)
+        self.assertTrue(first_search.context['paginate'] is True)
+        self.assertEqual(len(first_search.context['products']), 1)
+        self.assertEqual(first_search.status_code, second_search.status_code)
+        self.assertEqual(second_search.status_code, 200)
+        self.assertEqual(
+            len(first_search.context['products']),
+            len(second_search.context['products'])
+        )
 
     def test_result_product(self):
         # Test result page with an existing product

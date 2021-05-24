@@ -368,7 +368,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
         # search a category
         self.driver.find_element_by_xpath("//select[@name='search_filter']"
                                           "/option"
-                                          "[text()='Code Barre']").click()
+                                          "[text()='Code-Barres']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("12453JDS")
         time.sleep(1)
@@ -378,7 +378,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
         result = self.driver.find_element_by_id("form_error").text
         self.assertEqual(
             result,
-            "Seuls les chiffres sont autorisés dans un code barre"
+            "Seuls les chiffres sont autorisés dans un code-barres"
         )
 
     def test_nutriscore_search_with_two_letters(self):
@@ -412,7 +412,7 @@ class TestAppIntegration(StaticLiveServerTestCase):
         # search a brand
         self.driver.find_element_by_xpath("//select[@name='search_filter']"
                                           "/option"
-                                          "[text()='Code Barre']").click()
+                                          "[text()='Code-Barres']").click()
         search_field = self.driver.find_element_by_id('id_search')
         search_field.send_keys("12345678910")
         time.sleep(1)

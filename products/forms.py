@@ -38,7 +38,7 @@ class SearchForm(forms.Form):
         ('product', 'Produit'),
         ('category', 'Catégorie'),
         ('brand', 'Marque'),
-        ('barcode', 'Code Barre'),
+        ('barcode', 'Code-Barres'),
         ('score', 'Nutriscore')
     ]
     search_filter = forms.CharField(
@@ -72,17 +72,17 @@ class SearchForm(forms.Form):
             if len(search) < 5:
                 self._errors['search'] = self.error_class([
                     "Saisir, au minimum, cinq caractères pour valider "
-                    "la recherche d'un code barre"
+                    "la recherche d'un code-barres"
                 ])
             if len(search) > 13:
                 self._errors['search'] = self.error_class([
-                    "Les codes barres utilisent la norme EAN et ne peuvent "
+                    "Les codes-barres utilisent la norme EAN et ne peuvent "
                     "contenir, au maximum, que 13 caractères "
                     "numériques"
                 ])
             if bool(re.search(r"\D", search)):
                 self._errors['search'] = self.error_class([
-                    "Seuls les chiffres sont autorisés dans un code barre"
+                    "Seuls les chiffres sont autorisés dans un code-barres"
                 ])
 
     def check_nutriscore_search(self, search, search_filter):
