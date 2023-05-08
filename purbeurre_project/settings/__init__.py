@@ -86,9 +86,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pur_beurre',
-        'USER': 'admdjango',
-        'PASSWORD': 'django',
-        'HOST': '192.168.1.59',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PWD'),
+        'HOST': os.environ.get('PSQL_SRV'),
         'PORT': '5432'
     }
 }

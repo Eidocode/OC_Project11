@@ -1,3 +1,5 @@
+from django.core import management
+from django.db import connections
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -14,7 +16,6 @@ class TestUserExperience(TestCase):
     def setUpClass(cls):
         # Setup objects used for test methods
         super(TestUserExperience, cls).setUpClass()
-
         # Adds 1 category in test database
         category = Category(
             name='Category1',
@@ -36,7 +37,6 @@ class TestUserExperience(TestCase):
             )
         prod_with_accent.save()
         prod_with_accent.categories.add(category.id)
-
         # Add 40 products in test database
         number_of_products = 40
         for pnum in range(number_of_products):
@@ -53,7 +53,6 @@ class TestUserExperience(TestCase):
             )
             product.save()
             product.categories.add(category.id)
-
         products = Product.objects.all()
         # some class variables
         cls.product_id = products[1].id
@@ -73,24 +72,41 @@ class TestUserExperience(TestCase):
                         'password2': 'Apass_0404',
                     })
 
+    @classmethod
+    def tearDownClass(cls):
+        # Call super to close connections and remove data from the database
+        super().tearDownClass()
+        # Delete the test database
+        management.call_command('flush', verbosity=0, interactive=False)
+        # Disconnect from the test database
+        connections['default'].close()
+
     def test_categories(self):
-        # Test categories in database
+        """
+        Test categories in database
+        """
         categories = Category.objects.all()
         self.assertEqual(len(categories), 1)
 
     def test_products(self):
-        # Test products in database
+        """
+        Test products in database
+        """
         products = Product.objects.all()
         self.assertEqual(len(products), 41)
 
     def test_logon_user(self):
-        # Test that user is registered
+        """
+        Test that user is registered
+        """
         users = User.objects.all()
         self.assertEqual(len(users), 1)
         self.assertRedirects(self.logon_user, '/')
 
     def test_account(self):
-        # Test account page with logged user
+        """
+        Test account page with logged user
+        """
         account_page = self.client.get(reverse('user_account'))
         current_user = account_page.wsgi_request.user
         self.assertEqual(account_page.status_code, 200)
@@ -100,12 +116,16 @@ class TestUserExperience(TestCase):
         self.assertEqual(current_user.last_name, 'user4')
 
     def test_change_password_page(self):
-        # Test change password page
+        """
+        Test change password page
+        """
         password_page = self.client.get(reverse('change_password'))
         self.assertEqual(password_page.status_code, 200)
 
     def test_change_password_failure(self):
-        # Test change password (failure) with current user
+        """
+        Test change password (failure) with current user
+        """
         data = {
             'old_password': 'Apass_0101',
             'new_password1': 'Newpass_0505',
@@ -118,7 +138,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(change_password.status_code, 200)
 
     def test_change_password_success(self):
-        # Test change password (success) with current user
+        """
+        Test change password (success) with current user
+        """
         data = {
             'old_password': 'Apass_0404',
             'new_password1': 'Newpass_0505',
@@ -131,7 +153,9 @@ class TestUserExperience(TestCase):
         self.assertRedirects(change_password, reverse('user_account'))
 
     def test_search_product(self):
-        # Test to search an available product
+        """
+        Test to search an available product
+        """
         search = self.client.get(
             reverse('search')+'?search_filter=product&search=Product')
         self.assertEqual(search.status_code, 200)
@@ -139,7 +163,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(search.context['products']), 6)
 
     def test_search_product_with_accented_name(self):
-        # Product search test with or without accent
+        """
+        Product search test with or without accent
+        """
         first_search = self.client.get(
             reverse('search')+'?search_filter=product&search=Pâte')
         second_search = self.client.get(
@@ -155,7 +181,9 @@ class TestUserExperience(TestCase):
         )
 
     def test_result_product(self):
-        # Test result page with an existing product
+        """
+        Test result page with an existing product
+        """
         result = self.client.get(reverse(
                     'result',
                     kwargs={'product_id': self.product_id}
@@ -164,7 +192,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(result.context['substitutes']), 6)
 
     def test_search_category(self):
-        # Test search by category
+        """
+        Test search by category
+        """
         search = self.client.get(
             reverse('search')+'?search_filter=category&search=Category')
         self.assertEqual(search.status_code, 200)
@@ -172,7 +202,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(search.context['products']), 6)
 
     def test_search_brand(self):
-        # Test search by brand
+        """
+        Test search by brand
+        """
         search = self.client.get(
             reverse('search')+'?search_filter=brand&search=Brand')
         self.assertEqual(search.status_code, 200)
@@ -180,7 +212,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(search.context['products']), 6)
 
     def test_search_barcode(self):
-        # Test search by barcode
+        """
+        Test search by barcode
+        """
         search = self.client.get(
             reverse('search')+'?search_filter=barcode&search=1234567891012')
         self.assertEqual(search.status_code, 200)
@@ -188,7 +222,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(search.context['products']), 1)
 
     def test_search_nutriscore(self):
-        # Test search by nutriscore
+        """
+        Test search by nutriscore
+        """
         search = self.client.get(
             reverse('search')+'?search_filter=score&search=B')
         self.assertEqual(search.status_code, 200)
@@ -196,8 +232,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(search.context['products']), 6)
 
     def test_handles_favorites(self):
-        # Test to add, check & remove a product from favorites
-
+        """
+        Test to add, check & remove a product from favorites
+        """
         # Add a product to favorites
         self.client.get(reverse(
             'add_fav',
@@ -206,7 +243,6 @@ class TestUserExperience(TestCase):
                 'result',
                 kwargs={'product_id': self.product_id}))
         self.assertEqual(len(Favorite.objects.all()), 1)
-
         # Get a product from favorites
         favorite_page = self.client.get(reverse('favorites'))
         favorites = favorite_page.context['favorites']
@@ -214,7 +250,6 @@ class TestUserExperience(TestCase):
         for fav in favorites:
             self.favorite_id = fav.id
             self.assertEqual(fav.products.id, self.substitute_id)
-
         # Remove a product from favorites
         del_favorite = self.client.get(reverse(
                             'del_fav',
@@ -226,7 +261,9 @@ class TestUserExperience(TestCase):
         self.assertEqual(len(favorites), 0)
 
     def test_product_detail(self):
-        # Test detail page with an existing product
+        """
+        Test detail page with an existing product
+        """
         detail_page = self.client.get(reverse(
                         'detail',
                         kwargs={'product_id': self.product_id}))
@@ -259,7 +296,9 @@ class TestUserExperience(TestCase):
         )
 
     def test_logout_user(self):
-        # Test to logout current logged user
+        """
+        Test to logout the current logged user
+        """
         logout = self.client.get('/logout/')
         self.assertEqual(logout.status_code, 302)
         self.assertRedirects(logout, '/')

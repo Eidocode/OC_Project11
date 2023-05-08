@@ -1,3 +1,5 @@
+from django.core import management
+from django.db import connections
 from django.test import TestCase
 
 from products.models import Category, Product, Favorite
@@ -5,7 +7,7 @@ from products.models import Category, Product, Favorite
 
 class CategoryModelTest(TestCase):
     """
-        Category Model test case
+    Category Model test case
     """
 
     @classmethod
@@ -17,32 +19,51 @@ class CategoryModelTest(TestCase):
             url='https://www.openfoodfacts.com/pates'
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        # Call super to close connections and remove data from the database
+        super().tearDownClass()
+        # Delete the test database
+        management.call_command('flush', verbosity=0, interactive=False)
+        # Disconnect from the test database
+        connections['default'].close()
+
     def test_name_max_length(self):
-        # Test Category name max length
+        """
+        Test Category name max length
+        """
         category = Category.objects.get(id=1)
         max_length = category._meta.get_field('name').max_length
         self.assertEquals(max_length, 200)
 
     def test_json_id_label(self):
-        # Test Category json id field label
+        """
+        Test Category json id field label
+        """
         category = Category.objects.get(id=1)
         field_label = category._meta.get_field('json_id').verbose_name
         self.assertEquals(field_label, 'json id')
 
     def test_jsonid_max_length(self):
-        # Test Category json id max length
+        """
+        Test Category json id max length
+        """
         category = Category.objects.get(id=1)
         max_length = category._meta.get_field('json_id').max_length
         self.assertEquals(max_length, 200)
 
     def test_jsonid_is_unique(self):
-        # Test Category json id unicity
+        """
+        Test Category json id unicity constraint
+        """
         category = Category.objects.get(id=1)
         unique = category._meta.get_field('json_id').unique
         self.assertTrue(unique)
 
     def test_object_name_is_name(self):
-        # Test Category object name
+        """
+        Test Category object name
+        """
         category = Category.objects.get(id=1)
         object_name = category.name
         self.assertEquals(object_name, str(category))
@@ -50,7 +71,7 @@ class CategoryModelTest(TestCase):
 
 class ProductModelTest(TestCase):
     """
-        Product Model test case
+    Product Model test case
     """
 
     @classmethod
@@ -68,38 +89,59 @@ class ProductModelTest(TestCase):
             url_img_nutrition='https://www.off.com/poisson/saumon/img_nutri',
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        # Call super to close connections and remove data from the database
+        super().tearDownClass()
+        # Delete the test database
+        management.call_command('flush', verbosity=0, interactive=False)
+        # Disconnect from the test database
+        connections['default'].close()
+
     def test_name_max_length(self):
-        # Test Product name max length
+        """
+        Test Product name max length
+        """
         product = Product.objects.get(id=1)
         max_length = product._meta.get_field('name').max_length
         self.assertEquals(max_length, 200)
 
     def test_brand_max_length(self):
-        # Test Product brand max length
+        """
+        Test Product brand max length
+        """
         product = Product.objects.get(id=1)
         max_length = product._meta.get_field('brand').max_length
         self.assertEquals(max_length, 200)
 
     def test_score_max_length(self):
-        # Test Product score max length
+        """
+        Test Product score max length
+        """
         product = Product.objects.get(id=1)
         max_length = product._meta.get_field('score').max_length
         self.assertEquals(max_length, 1)
 
     def test_barcode_max_length(self):
-        # Test Product barcode max length
+        """
+        Test Product barcode max length
+        """
         product = Product.objects.get(id=1)
         max_length = product._meta.get_field('barcode').max_length
         self.assertEquals(max_length, 50)
 
     def test_barcode_is_unique(self):
-        # Test Product barcode unicity
+        """
+        Test Product barcode unicity
+        """
         product = Product.objects.get(id=1)
         unique = product._meta.get_field('barcode').unique
         self.assertTrue(unique)
 
     def test_object_name_is_name_brand_barcode(self):
-        # Test Product object name
+        """
+        Test Product object name
+        """
         product = Product.objects.get(id=1)
         object_name = f'{product.name}, {product.brand}, {product.barcode}'
         self.assertEquals(object_name, str(product))
@@ -107,10 +149,12 @@ class ProductModelTest(TestCase):
 
 class FavoriteModelTest(TestCase):
     """
-        Favorite Model test case
+    Favorite Model test case
     """
 
     def test_added_date_autonow(self):
-        # Test Favorite added date autonow
+        """
+        Test Favorite added date autonow
+        """
         added_date = Favorite._meta.get_field('added_date').auto_now_add
         self.assertTrue(added_date)
